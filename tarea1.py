@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import random
 
-# Configuración de los GPIO
+# Configuración de los GPIO para LEDs de dos colores, botones y buzzer
 led_pins = [
     (20, 21),  # LED 1
     (16, 12),  # LED 2
@@ -28,20 +28,28 @@ for pin in button_pins:
 # Configuramos el buzzer como salida
 GPIO.setup(buzzer_pin, GPIO.OUT)
 
-def encender_leds(led_pair):
-    GPIO.output(led_pair[0], GPIO.HIGH)
-    GPIO.output(led_pair[1], GPIO.HIGH)
+def encender_led(led_pair, color):
+    """Enciende un LED en un color específico (rojo o azul)."""
+    if color == "azul":
+        GPIO.output(led_pair[0], GPIO.HIGH)
+        GPIO.output(led_pair[1], GPIO.LOW)
+    elif color == "rojo":
+        GPIO.output(led_pair[0], GPIO.LOW)
+        GPIO.output(led_pair[1], GPIO.HIGH)
 
 def apagar_leds(led_pair):
+    """Apaga ambos colores del LED."""
     GPIO.output(led_pair[0], GPIO.LOW)
     GPIO.output(led_pair[1], GPIO.LOW)
 
 def beep_buzzer(tiempo):
+    """Emite un sonido por el buzzer."""
     GPIO.output(buzzer_pin, GPIO.HIGH)
     time.sleep(tiempo)
     GPIO.output(buzzer_pin, GPIO.LOW)
 
 def inicio_juego():
+    """Emite un tono para iniciar el juego."""
     beep_buzzer(0.5)
     time.sleep(0.5)
     beep_buzzer(0.5)
@@ -49,18 +57,17 @@ def inicio_juego():
     beep_buzzer(0.5)
 
 def generar_secuencia():
+    """Genera una secuencia aleatoria de LEDs con zonas de acierto y trampa."""
     secuencia = []
     for led_pair in led_pins:
-        estado = random.choice([True, False])
-        if estado:
-            encender_leds(led_pair)
-        else:
-            apagar_leds(led_pair)
-        secuencia.append(estado)
+        color = random.choice(["rojo", "azul"])
+        encender_led(led_pair, color)
+        secuencia.append(color)
     return secuencia
 
 def verificar_acierto(indice, secuencia, jugador):
-    if secuencia[indice]:
+    """Verifica si el jugador acertó o falló al presionar un botón."""
+    if secuencia[indice] == "azul":
         apagar_leds(led_pins[indice])
         beep_buzzer(0.2)  # Sonido de acierto
         return 1
