@@ -15,6 +15,7 @@ buzzer_pin = 23                    # Parlante/buzzer
 
 # Configuración de pines GPIO
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)  # Desactiva advertencias de uso previo de pines
 
 # Configuramos los LEDs como salidas
 for led_pair in led_pins:
@@ -85,6 +86,7 @@ tiempo_entre_leds = float(input("Ingrese el tiempo entre cada combinación de LE
 
 # Agregar debounce para evitar múltiples lecturas en una sola pulsación
 def manejar_pulsacion(pin):
+    global jugador_actual
     for i, boton_pin in enumerate(button_pins):
         if pin == boton_pin:
             resultado = verificar_acierto(i, secuencia, jugador_actual)
@@ -103,7 +105,7 @@ try:
 
             # Configurar el evento de pulsación para cada botón
             for pin in button_pins:
-                GPIO.add_event_detect(pin, GPIO.RISING, callback=manejar_pulsacion, bouncetime=200)
+                GPIO.add_event_detect(pin, GPIO.RISING, callback=manejar_pulsacion, bouncetime=300)
 
             # Mantener el juego activo durante el tiempo del turno
             while time.time() - inicio_ronda < tiempo_turno:
