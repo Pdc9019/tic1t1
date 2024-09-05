@@ -68,14 +68,18 @@ def generar_secuencia():
 def verificar_acierto(indice, secuencia, jugador):
     """Verifica si el jugador acertó o falló al presionar un botón."""
     if secuencia[indice] == "azul":
-        apagar_leds(led_pins[indice])
+        apagar_leds(led_pins[indice])  # Apaga el LED si se acierta
         beep_buzzer(0.2)  # Sonido de acierto
+        print(f"Jugador {jugador + 1} acertó en LED {indice + 1} (zona de acierto)")
         return 1
     else:
+        print(f"Jugador {jugador + 1} falló en LED {indice + 1} (zona de trampa)")
+        # Emite un sonido diferente para indicar que falló
         beep_buzzer(0.2)
         time.sleep(0.1)
         beep_buzzer(0.2)  # Sonido de fallo
         return -1
+
 
 # Configuración inicial del juego
 num_jugadores = int(input("Ingrese el número de jugadores: "))
