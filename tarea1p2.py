@@ -126,8 +126,8 @@ try:
                     if GPIO.input(pin) == GPIO.LOW:  # Si se presiona el botón
                         resultado, aciertos_consecutivos = verificar_acierto(i, secuencia, jugador, aciertos_consecutivos)
                         puntajes[jugador] += resultado
-                        time.sleep(0.5)  # Evitar múltiples lecturas del mismo botón
-
+                        time.sleep(0.01)  # Evitar múltiples lecturas del mismo botón
+            time.sleep(tiempo_entre_leds)
             print(f"Jugador {jugador + 1} puntaje: {puntajes[jugador]}")
 
     print("Juego terminado!")

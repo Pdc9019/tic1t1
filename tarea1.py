@@ -106,7 +106,7 @@ try:
                         
                         resultado = verificar_acierto(i, secuencia, jugador)
                         puntajes[jugador] += resultado
-                        time.sleep(0.5)  # Evitar múltiples lecturas del mismo botón
+                        time.sleep(0.01)  # Evitar múltiples lecturas del mismo botón
 
                # time.sleep(tiempo_entre_leds)
 
