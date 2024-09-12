@@ -23,14 +23,14 @@ for led_pair in led_pins:
 
 # Configuramos los botones como entradas con pull-down resistors
 for pin in button_pins:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Configuramos el buzzer como salida
 GPIO.setup(buzzer_pin, GPIO.OUT)
 
 def encender_led(led_pair, color):
     """Enciende un LED en un color específico (rojo o azul)."""
-    if color == "azul":
+    if color == "verde":
         GPIO.output(led_pair[0], GPIO.HIGH)
         GPIO.output(led_pair[1], GPIO.LOW)
     elif color == "rojo":
@@ -60,7 +60,7 @@ def generar_secuencia():
     """Genera una secuencia aleatoria de LEDs con zonas de acierto y trampa."""
     secuencia = []
     for led_pair in led_pins:
-        color = random.choice(["rojo", "azul"])
+        color = random.choice(["rojo", "verde"])
         encender_led(led_pair, color)
         secuencia.append(color)
     return secuencia
@@ -96,16 +96,19 @@ try:
         for ronda in range(num_rondas):
             print(f"Ronda {ronda + 1}")
             secuencia = generar_secuencia()
-
+            print (secuencia)
             inicio_ronda = time.time()
             while time.time() - inicio_ronda < tiempo_turno:
+          
                 for i, pin in enumerate(button_pins):
-                    if GPIO.input(pin) == GPIO.HIGH:  # Si se presiona el botón
+                    
+                    if GPIO.input(pin) == GPIO.LOW:  # Si se presiona el botón
+                        
                         resultado = verificar_acierto(i, secuencia, jugador)
                         puntajes[jugador] += resultado
-                        time.sleep(0.5)  # Evitar múltiples lecturas del mismo botón
+                        time.sleep(0.1)  # Evitar múltiples lecturas del mismo botón
 
-                time.sleep(tiempo_entre_leds)
+               # time.sleep(tiempo_entre_leds)
 
             print(f"Jugador {jugador + 1} puntaje: {puntajes[jugador]}")
 
@@ -117,3 +120,8 @@ finally:
     for led_pair in led_pins:
         apagar_leds(led_pair)
     GPIO.cleanup()
+    
+    
+    
+    
+    #aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
