@@ -4,8 +4,8 @@ import random
 
 # Configuración de los GPIO para LEDs de dos colores, botones y buzzer
 led_pins = [
-    (20, 21),  # LED 1
-    (16, 12),  # LED 2
+    (21, 20),  # LED 1
+    (12, 16),  # LED 2
     (26, 19),  # LED 3
     (13, 6),   # LED 4
     (5, 24)    # LED 5
@@ -29,7 +29,7 @@ for pin in button_pins:
 GPIO.setup(buzzer_pin, GPIO.OUT)
 
 def encender_led(led_pair, color):
-    """Enciende un LED en un color específico (rojo o azul)."""
+    """Enciende un LED en un color específico (rojo o verde)."""
     if color == "verde":
         GPIO.output(led_pair[0], GPIO.HIGH)
         GPIO.output(led_pair[1], GPIO.LOW)
@@ -54,7 +54,7 @@ def inicio_juego():
     time.sleep(0.5)
     beep_buzzer(0.5)
     time.sleep(0.5)
-    beep_buzzer(0.5)
+    beep_buzzer(0.8)
 
 def generar_secuencia():
     """Genera una secuencia aleatoria de LEDs con zonas de acierto y trampa."""
@@ -67,7 +67,7 @@ def generar_secuencia():
 
 def verificar_acierto(indice, secuencia, jugador):
     """Verifica si el jugador acertó o falló al presionar un botón."""
-    if secuencia[indice] == "azul":
+    if secuencia[indice] == "verde":
         apagar_leds(led_pins[indice])  # Apaga el LED si se acierta
         beep_buzzer(0.2)  # Sonido de acierto
         print(f"Jugador {jugador + 1} acertó en LED {indice + 1} (zona de acierto)")
@@ -106,7 +106,7 @@ try:
                         
                         resultado = verificar_acierto(i, secuencia, jugador)
                         puntajes[jugador] += resultado
-                        time.sleep(0.1)  # Evitar múltiples lecturas del mismo botón
+                        time.sleep(0.5)  # Evitar múltiples lecturas del mismo botón
 
                # time.sleep(tiempo_entre_leds)
 
