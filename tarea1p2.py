@@ -113,21 +113,26 @@ try:
         aciertos_consecutivos = 0  # Contador de aciertos consecutivos
         for ronda in range(num_rondas):
             print(f"Ronda {ronda + 1}")
-            secuencia = seleccionar_secuencia()
-            print(f"Secuencia seleccionada: {secuencia}")
-            
-            # Enciende los LEDs según la secuencia
-            for i, color in enumerate(secuencia):
-                encender_led(led_pins[i], color)
             
             inicio_ronda = time.time()
             while time.time() - inicio_ronda < tiempo_turno:
-                for i, pin in enumerate(button_pins):
-                    if GPIO.input(pin) == GPIO.LOW:  # Si se presiona el botón
-                        resultado, aciertos_consecutivos = verificar_acierto(i, secuencia, jugador, aciertos_consecutivos)
-                        puntajes[jugador] += resultado
-                        time.sleep(0.01)  # Evitar múltiples lecturas del mismo botón
-            time.sleep(tiempo_entre_leds)
+                # Selecciona una nueva secuencia aleatoria durante el turno
+                secuencia = seleccionar_secuencia()
+                print(f"Secuencia seleccionada: {secuencia}")
+                
+                # Enciende los LEDs según la secuencia
+                for i, color in enumerate(secuencia):
+                    encender_led(led_pins[i], color)
+
+                # Monitorea los botones durante el tiempo del turno
+                tiempo_secuencia = time.time()
+                while time.time() - tiempo_secuencia < tiempo_entre_leds:
+                    for i, pin in enumerate(button_pins):
+                        if GPIO.input(pin) == GPIO.LOW:  # Si se presiona el botón
+                            resultado, aciertos_consecutivos = verificar_acierto(i, secuencia, jugador, aciertos_consecutivos)
+                            puntajes[jugador] += resultado
+                            time.sleep(0.5)  # Evitar múltiples lecturas del mismo botón
+
             print(f"Jugador {jugador + 1} puntaje: {puntajes[jugador]}")
 
     print("Juego terminado!")
