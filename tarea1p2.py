@@ -40,7 +40,7 @@ sec_ant = None
 
 def encender_led(led_pair, color):
     """Enciende un LED en un color específico (rojo o verde)."""
-    if color == "verde":
+if color == "verde":
         GPIO.output(led_pair[0], GPIO.HIGH)
         GPIO.output(led_pair[1], GPIO.LOW)
     elif color == "rojo":
