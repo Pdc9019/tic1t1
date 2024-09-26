@@ -35,6 +35,8 @@ secuencias_predefinidas = [
     ["rojo", "rojo", "verde", "verde", "rojo"],  # Secuencia 3
     ["verde", "verde", "rojo", "rojo", "verde"],  # Secuencia 4
 ]
+sec_ant = None
+
 
 def encender_led(led_pair, color):
     """Enciende un LED en un color específico (rojo o verde)."""
@@ -65,8 +67,17 @@ def inicio_juego():
     beep_buzzer(0.8)
 
 def seleccionar_secuencia():
+    global sec_ant
     """Selecciona aleatoriamente una de las secuencias predefinidas."""
-    return random.choice(secuencias_predefinidas)
+    if sec_ant is None:
+        sec_ant = random.choice(secuencias_predefinidas)
+        return sec_ant
+    while True:
+        sec_new = random.choice(secuencias_predefinidas)
+        if sec_ant != sec_new:
+            sec_ant = sec_new
+            return sec_new   
+        
 
 def aplicar_bonificacion(aciertos_consecutivos):
     """Aplica bonificaciones según los aciertos consecutivos."""
@@ -131,7 +142,7 @@ try:
                         if GPIO.input(pin) == GPIO.LOW:  # Si se presiona el botón
                             resultado, aciertos_consecutivos = verificar_acierto(i, secuencia, jugador, aciertos_consecutivos)
                             puntajes[jugador] += resultado
-                            time.sleep(0.5)  # Evitar múltiples lecturas del mismo botón
+                            time.sleep(0.01)  # Evitar múltiples lecturas del mismo botón
 
             print(f"Jugador {jugador + 1} puntaje: {puntajes[jugador]}")
 
