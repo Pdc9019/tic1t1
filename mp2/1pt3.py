@@ -125,7 +125,7 @@ while True:
     except RuntimeError as error:
         # Errores durante la lectura del sensor
     
-        time.sleep(2.0)
+        time.sleep(1.0)
         continue
     except Exception as error:
         # Otras excepciones
@@ -133,7 +133,7 @@ while True:
         raise error
 
     # Intervalo de tiempo entre lecturas
-    time.sleep(2.0)
+    time.sleep(1.0)
 
 if dhtDevice:
     dhtDevice.exit()
