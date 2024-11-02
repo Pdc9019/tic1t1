@@ -124,14 +124,12 @@ while True:
 
     except RuntimeError as error:
         # Errores durante la lectura del sensor
-        error_message = f"Runtime error: {error.args[0]}"
-        logging.error(f"[Error]: {error_message}")
+    
         time.sleep(2.0)
         continue
     except Exception as error:
         # Otras excepciones
-        error_message = f"Unexpected error: {error}"
-        logging.critical(f"[Critical]: {error_message}")
+  
         raise error
 
     # Intervalo de tiempo entre lecturas
